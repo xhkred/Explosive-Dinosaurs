@@ -4,15 +4,15 @@
 HWND				g_hWnd;			//Winow Handle
 HINSTANCE			g_hInstance;	//Application Handle
 bool				g_bWindowed;	// Window or fullscreen
-
-//#include "Graphics_DX9.h"; Will define Graphics code here				TODO
+//DirectX plug
+#include "Graphics_DX9.h"; 
 //NOTE: the game will basically be defined through here
 
 #define SCREEN_WIDTH 1980
 #define SCREEN_HEIGHT 1080
 #define WINDOW_TITLE L"Game"
 
-//declare instance of Graphics here										TODO
+Graphics_DX9 DXObj;									
 
 int WINAPI wWinMain(HINSTANCE hInstance,		// Handle to the application
 	HINSTANCE hPrevInstance,					// Handle to the previous app
@@ -65,7 +65,8 @@ int WINAPI wWinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPTSTR lpCmdLine
 	MSG msg; 
 	ZeroMemory(&msg, sizeof(msg));	// Use this msg structure to catch window messages
 
-	// Initialize DirectX/Game here																	TODO
+	// Initialize DirectX/Game here																	
+	DXObj.Init(g_hWnd,hInstance,g_bWindowed);
 
 	__int64 cntsPerSec = 0;
 	QueryPerformanceFrequency((LARGE_INTEGER*)&cntsPerSec);
@@ -87,12 +88,15 @@ int WINAPI wWinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPTSTR lpCmdLine
 		}
 		else
 		{
-			//Update and Render game here																TODO
+			//Update and Render game here																
+			DXObj.Update(dt);
+			DXObj.Render();	
 		}
 		prevTimeStamp = currTimeStamp; 
 	}
 
-	//Put all end of life code here																		TODO
+	//Put all end of life code here																		
+	DXObj.Shutdown();
 
 	// Unregister window
 	UnregisterClassW(WINDOW_TITLE, g_hInstance);
